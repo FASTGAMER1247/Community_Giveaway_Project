@@ -1,0 +1,33 @@
+{% extends "giveaways/base.html" %}
+{% block title %}{{ item.title }} — GiveAway{% endblock %}
+{% block content %}
+<div class="detail-page">
+  <a class="back-link" href="{% url 'home' %}">← Back to listings</a>
+  <div class="detail-layout">
+    <div class="detail-visual">
+      <div class="detail-symbol">{% if item.category == "Books" %}▤{% elif item.category == "Electronics" %}⌁{% elif item.category == "Clothing" %}◇{% elif item.category == "Home" %}⌂{% elif item.category == "Stationery" %}✎{% else %}✳{% endif %}</div>
+      <span class="category-pill">{{ item.get_category_display }}</span>
+    </div>
+    <div class="detail-copy">
+      {% if item.status == "available" and not item.is_expired %}<span class="status status-available">● Available</span>{% elif item.status == "claimed" %}<span class="status status-claimed">● Rehomed</span>{% else %}<span class="status status-expired">● Collection deadline passed</span>{% endif %}
+      <h1>{{ item.title }}</h1>
+      <p class="detail-description">{{ item.description|linebreaksbr }}</p>
+      <div class="detail-facts">
+        <div><span>Collection location</span><strong>{{ item.location }}</strong></div>
+        <div><span>Shared by</span><strong>{{ item.created_by.username }}</strong></div>
+        <div><span>Contact</span><strong>{{ item.contact_info }}</strong></div>
+        <div><span>Collect by</span><strong>{% if item.collection_deadline %}{{ item.collection_deadline|date:"F j, Y" }}{% else %}No deadline specified{% endif %}</strong></div>
+      </div>
+      {% if item.status == "available" and not item.is_expired %}
+        {% if user.is_authenticated and user != item.created_by %}
+          <form method="post" action="{% url 'claim_item' item.pk %}" data-confirm="Claim this item? Please contact the giver to arrange collection.">{% csrf_token %}<button class="button button-dark button-full">I would like to claim this <span>↗</span></button></form>
+        {% elif not user.is_authenticated %}<a class="button button-dark button-full" href="{% url 'login' %}?next={{ request.path|urlencode }}">Log in to claim this item <span>↗</span></a>
+        {% else %}<div class="notice-box">This is your listing. You can manage it from My activity.</div>{% endif %}
+      {% endif %}
+      {% if user == item.created_by and item.status == "claimed" %}
+        <form method="post" action="{% url 'mark_available' item.pk %}" data-confirm="Make this listing available again?">{% csrf_token %}<button class="button button-light button-full">Mark available again</button></form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

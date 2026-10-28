@@ -1,0 +1,21 @@
+{% extends "giveaways/base.html" %}
+{% block title %}Give an item — GiveAway{% endblock %}
+{% block content %}
+<div class="form-page">
+  <a class="back-link" href="{% url 'home' %}">← Back to listings</a>
+  <div class="form-intro"><div class="eyebrow">PASS IT FORWARD</div><h1>{{ page_title|default:"Give something away" }}</h1><p>Share a useful item with someone who can give it a new home.</p></div>
+  <form method="post" class="panel-form">{% csrf_token %}
+    {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+    {% for field in form %}
+      <div class="field-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="required">*</span>{% endif %}</label>
+        {{ field }}
+        {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+        {% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}
+      </div>
+    {% endfor %}
+    <div class="form-note"><span>✳</span><p>Please only list items that are safe, legal, and in usable condition. Your contact details will be visible to people viewing this listing.</p></div>
+    <button class="button button-dark button-full" type="submit">Publish listing <span>↗</span></button>
+  </form>
+</div>
+{% endblock %}

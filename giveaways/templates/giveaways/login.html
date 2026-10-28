@@ -1,0 +1,11 @@
+{% extends "giveaways/base.html" %}
+{% block title %}Log in — GiveAway{% endblock %}
+{% block content %}
+<div class="auth-page"><div class="auth-art"><span class="auth-art-symbol">g</span><p>Small acts of sharing<br>make a big difference.</p></div><div class="auth-form-wrap"><div class="eyebrow">WELCOME BACK</div><h1>Good to see you.</h1><p class="auth-subtitle">Log in to share or find something useful.</p>
+{% if form.errors %}<div class="form-errors">Please check your username and password.</div>{% endif %}
+<form method="post" class="panel-form">{% csrf_token %}<input type="hidden" name="next" value="{{ next }}">
+<div class="field-group"><label for="id_username">Username</label><input class="form-control" id="id_username" name="username" autocomplete="username" required></div>
+<div class="field-group"><label for="id_password">Password</label><input class="form-control" id="id_password" name="password" type="password" autocomplete="current-password" required></div>
+<button class="button button-dark button-full">Log in <span>↗</span></button></form>
+<p class="auth-switch">New here? <a href="{% url 'signup' %}">Create an account</a></p></div></div>
+{% endblock %}

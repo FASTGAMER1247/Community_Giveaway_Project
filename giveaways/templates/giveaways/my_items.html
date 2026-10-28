@@ -1,0 +1,13 @@
+{% extends "giveaways/base.html" %}
+{% block title %}My activity — GiveAway{% endblock %}
+{% block content %}
+<div class="my-header"><div><div class="eyebrow">YOUR COMMUNITY ACTIVITY</div><h1>My activity</h1><p>Keep track of the things you've shared and claimed.</p></div><a class="button button-dark" href="{% url 'create_item' %}">+ Give an item</a></div>
+<section class="my-section"><h2>Items I've shared <span>{{ posted|length }}</span></h2><div class="simple-list">
+{% for item in posted %}<a href="{% url 'item_detail' item.pk %}" class="simple-row"><span class="simple-icon">✳</span><span class="simple-main"><strong>{{ item.title }}</strong><small>{{ item.location }} · {{ item.created_at|date:"M j, Y" }}</small></span><span class="status status-{{ item.status }}">{{ item.get_status_display }}</span><span>↗</span></a>
+{% empty %}<div class="empty-inline">You haven't shared anything yet. <a href="{% url 'create_item' %}">List your first item →</a></div>{% endfor %}
+</div></section>
+<section class="my-section"><h2>Items I've claimed <span>{{ claimed|length }}</span></h2><div class="simple-list">
+{% for item in claimed %}<a href="{% url 'item_detail' item.pk %}" class="simple-row"><span class="simple-icon">♡</span><span class="simple-main"><strong>{{ item.title }}</strong><small>Shared by {{ item.created_by.username }} · {{ item.location }}</small></span><span class="status status-claimed">Claimed</span><span>↗</span></a>
+{% empty %}<div class="empty-inline">You haven't claimed any items yet. <a href="{% url 'home' %}">Explore listings →</a></div>{% endfor %}
+</div></section>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "giveaways/base.html" %}
+{% block title %}Join GiveAway{% endblock %}
+{% block content %}
+<div class="auth-page"><div class="auth-art"><span class="auth-art-symbol">g</span><p>Pass it on.<br>Make someone's day.</p></div><div class="auth-form-wrap"><div class="eyebrow">JOIN THE COMMUNITY</div><h1>Make room for good.</h1><p class="auth-subtitle">Create an account to give and claim items.</p>
+<form method="post" class="panel-form">{% csrf_token %}
+{% for field in form %}<div class="field-group"><label for="{{ field.id_for_label }}">{{ field.label }}</label><input class="form-control" type="{{ field.field.widget.input_type|default:'text' }}" name="{{ field.html_name }}" id="{{ field.id_for_label }}" {% if field.name == 'username' %}autocomplete="username"{% else %}autocomplete="new-password"{% endif %} required>
+{% if field.help_text %}<small>{{ field.help_text|safe }}</small>{% endif %}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>{% endfor %}
+<button class="button button-dark button-full">Create account <span>↗</span></button></form>
+<p class="auth-switch">Already joined? <a href="{% url 'login' %}">Log in</a></p></div></div>
+{% endblock %}
